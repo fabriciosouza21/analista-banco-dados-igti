@@ -1,0 +1,65 @@
+
+para acessar o container 
+docker exec -ti <nome_container> bash
+
+CREATE KEYSPACE blog
+ WITH 
+ REPLICATION = {
+   'class': 'SimpleStrategy',
+   'replication_factor' : 1
+ };
+
+use teste;
+
+CREATE TABLE posts (
+    tag varchar,
+    name varchar, 
+    author varchar,
+    description text, 
+    likes int, 
+    PRIMARY KEY (tag, name)
+  );
+
+insert into teste.posts (tag, name, author, description, likes) 
+values
+('apache-cassandra','Cassandra post','Jose','post do cassandra',0);
+
+select * from posts;
+
+insert into teste.posts (tag, name, author, description, likes)
+values
+('apache-cassandra','Cassandra post','Jose','post do cassandra',1);
+
+update posts set likes = 2 
+where tag = 'apache-cassandra' and name = 'Cassandra post';
+
+select * from posts;
+
+update posts set likes = 2 
+where tag = 'apache-kafka' and name = 'Kafka post';
+
+select * from posts where tag =   'apache-cassandra';
+
+select * from posts where likes = 1; (error)
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+
+select * from posts where likes = 2 allow filtering;
+
+
+Criando views materializadas
+A partir da versão 3.0 do Cassandra, é possível utilizar as views materializadas. Segue exemplo de criação:
+
+
+create materialized view posts_by_likes as 
+select tag, name, author, description, likes
+from posts
+where tag is not null 
+and name is not null
+and likes is not null
+PRIMARY KEY (likes, tag, name);
+
+A partition key da view é o campo likes. Com isso, pode-se fazer a query filtrando pela quantidade de likes sem utilizar a cláusula “ALLOW FILTERING”:
+
+select * from posts_by_likes where likes = 2;
+
+
