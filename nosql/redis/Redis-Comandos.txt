@@ -1,0 +1,102 @@
+https://redis.io/commands
+
+Redis Set
+The First command is the Set Command. Let’s first add some keys so that we can access it using the get command.
+set key value
+> 127.0.0.1:6379> set name "Divyanshu Shekhar"
+  OK
+> 127.0.0.1:6379> set marks 90
+  OK
+
+get name
+get marks
+The Get command is used to retrieve value of a key.
+keys * 
+
+Redis Overwrite Value
+The key’s value can be set as many times as you want. The last set value will be taken as the current value of the key.
+set name "Divyanshu Shekhar"
+  OK
+get name
+  "Divyanshu Shekhar"
+set name "Hritul Priya"
+  OK
+get name
+  "Hritul Priya"
+
+Redis Get all Keys
+We can also get all the keys that we have set.
+keys *
+keys *
+  1) "marks"
+  2) "name"
+
+
+Delete a key in Redis
+There is also a delete command in Redis to delete the key value.
+
+-----del key ----
+
+del marks
+
+keys *
+
+
+Deleting all keys in Redis – flushall
+This command deletes all the keys from the database.
+
+keys *
+flushall
+  OK
+keys *
+  (empty list or set)
+
+
+Redis Length of Value
+Get the length of the value using the strlen command in Redis.
+
+strlen key
+
+strlen name
+
+set name "Divyanshu Shekhar"
+  OK
+strlen name
+(integer) 17
+
+Redis Increment and Decrement
+We can also increment and decrement the value of a key.
+
+set num 17
+  OK
+incr num
+  (integer) 18
+decr num
+  (integer) 17
+The values can be incremented and decremented by any number of values using the incrby and decrby value.
+
+incrby num 10
+  (integer) 27
+decrby num 5
+  (integer) 22
+These commands only work in the numerical value.
+
+set name "DS"
+  OK
+incr name
+  (error) ERR value is not an integer or out of range
+
+
+
+Redis Append
+This command is used to append a value to a pre-existing key.
+
+append key value
+
+> 127.0.0.1:6379> set name "Divyanshu"
+  OK
+> 127.0.0.1:6379> append name " Shekhar"
+  (integer) 17
+> 127.0.0.1:6379> get name
+  "Divyanshu Shekhar"
+
